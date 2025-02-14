@@ -24,7 +24,8 @@ class TeaBot(cmds.Bot):
 
 
 if __name__ == '__main__':
+    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
     load_dotenv()
     token = os.getenv("TOKEN")
     bot = TeaBot()
-    bot.run(token)
+    bot.run(token, log_handler=handler)
