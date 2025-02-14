@@ -1,15 +1,18 @@
 import os
 import logging
 import logging.handlers
-import discord
+import discord as d
 from discord.ext import commands as cmds
 from dotenv import load_dotenv
 from settings import TREE_SYNC, COGS
 
+intents = d.Intents.default()
+intents.message_content = True
+
 
 class TeaBot(cmds.Bot):
     def __init__(self):
-        super().__init__(command_prefix="!", intents=discord.Intents.all())
+        super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self) -> None:
         if COGS:
@@ -40,8 +43,10 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 if __name__ == '__main__':
-    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
     load_dotenv()
     token = os.getenv("TOKEN")
     bot = TeaBot()
-    bot.run(token, log_handler=None)
+    try:
+        bot.run(token)
+    except Exception as e:
+        print(e)
